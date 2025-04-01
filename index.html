@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大乐透号码预测</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+            margin-bottom: 30px;
+        }
+        .prediction-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .prediction-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .number-input {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .number-input input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .predicted-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .prediction-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .predicted-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+            background-color: #2ecc71;
+        }
+        .predicted-separator {
+            margin: 0 10px;
+            font-weight: bold;
+            color: #666;
+        }
+        .refresh-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .refresh-button:hover {
+            background-color: #2980b9;
+        }
+        .error {
+            text-align: center;
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>大乐透号码预测</h1>
+        <div class="prediction-section">
+            <h2 class="prediction-title">预测号码</h2>
+            <div class="number-input">
+                <label for="number-count">推荐注数：</label>
+                <input type="number" id="number-count" min="1" max="10" value="1">
+            </div>
+            <div class="predicted-numbers" id="predicted-numbers-container">
+                <!-- 预测号码将在这里动态生成 -->
+            </div>
+            <button class="refresh-button" onclick="generatePrediction()">生成新预测</button>
+        </div>
+    </div>
+
+    <script>
+        // 生成预测号码
+        function generatePrediction() {
+            const count = parseInt(document.getElementById('number-count').value) || 1;
+            const container = document.getElementById('predicted-numbers-container');
+            container.innerHTML = ''; // 清空现有内容
+
+            for (let i = 0; i < count; i++) {
+                const frontNumbers = [];
+                const backNumbers = [];
+                
+                // 生成前区号码（5个，1-35）
+                while (frontNumbers.length < 5) {
+                    const num = Math.floor(Math.random() * 35) + 1;
+                    if (!frontNumbers.includes(num)) {
+                        frontNumbers.push(num);
+                    }
+                }
+                
+                // 生成后区号码（2个，1-12）
+                while (backNumbers.length < 2) {
+                    const num = Math.floor(Math.random() * 12) + 1;
+                    if (!backNumbers.includes(num)) {
+                        backNumbers.push(num);
+                    }
+                }
+                
+                // 排序
+                frontNumbers.sort((a, b) => a - b);
+                backNumbers.sort((a, b) => a - b);
+
+                // 创建新的预测号码组
+                const group = document.createElement('div');
+                group.className = 'prediction-group';
+                group.innerHTML = `
+                    <span>第${i + 1}注：</span>
+                    ${frontNumbers.map(n => `<div class="predicted-number">${n}</div>`).join('')}
+                    <span class="predicted-separator">+</span>
+                    ${backNumbers.map(n => `<div class="predicted-number">${n}</div>`).join('')}
+                `;
+                container.appendChild(group);
+            }
+        }
+
+        // 页面加载时生成初始预测
+        generatePrediction();
+    </script>
+</body>
+</html>
